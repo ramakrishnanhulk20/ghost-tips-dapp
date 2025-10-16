@@ -1,0 +1,871 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\contracts\\FHECounter.sol": {
+      "lastModificationDate": 1760447936784,
+      "contentHash": "ba5c544654fe50879faa26cd7822c317",
+      "sourceName": "contracts/FHECounter.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@fhevm/solidity/lib/FHE.sol",
+        "@fhevm/solidity/config/ZamaConfig.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "FHECounter"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\fhevmTemp\\@fhevm\\solidity\\config\\ZamaConfig.sol": {
+      "lastModificationDate": 1760449095187,
+      "contentHash": "53afa19b446a7b49a624afc5d40ac227",
+      "sourceName": "@fhevm/solidity/config/ZamaConfig.sol",
+      "solcConfig": {
+        "version": "0.8.27",
+        "settings": {
+          "metadata": {
+            "bytecodeHash": "none",
+            "useLiteralContent": true
+          },
+          "optimizer": {
+            "enabled": true,
+            "runs": 800
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@zama-fhe/oracle-solidity/address/ZamaOracleAddress.sol",
+        "@fhevm/solidity/lib/FHE.sol",
+        "@fhevm/solidity/lib/Impl.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "EthereumConfig",
+        "SepoliaConfig",
+        "ZamaConfig"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\@fhevm\\solidity\\lib\\FHE.sol": {
+      "lastModificationDate": 1760448400632,
+      "contentHash": "4595eb92a31223262d4e29a27c938d97",
+      "sourceName": "@fhevm/solidity/lib/FHE.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./Impl.sol",
+        "./FheType.sol",
+        "encrypted-types/EncryptedTypes.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "FHE",
+        "IDecryptionOracle",
+        "IKMSVerifier"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\fhevmTemp\\@zama-fhe\\oracle-solidity\\address\\ZamaOracleAddress.sol": {
+      "lastModificationDate": 1760449095203,
+      "contentHash": "7d4cce05c3d5e3799454d5a9fba75048",
+      "sourceName": "@zama-fhe/oracle-solidity/address/ZamaOracleAddress.sol",
+      "solcConfig": {
+        "version": "0.8.27",
+        "settings": {
+          "metadata": {
+            "bytecodeHash": "none",
+            "useLiteralContent": true
+          },
+          "optimizer": {
+            "enabled": true,
+            "runs": 800
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\@fhevm\\solidity\\lib\\Impl.sol": {
+      "lastModificationDate": 1760448400850,
+      "contentHash": "82d95a375319ded89a84a9323575b351",
+      "sourceName": "@fhevm/solidity/lib/Impl.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./FheType.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "IACL",
+        "IFHEVMExecutor",
+        "IInputVerifier",
+        "Impl"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\@fhevm\\solidity\\lib\\FheType.sol": {
+      "lastModificationDate": 1760448400732,
+      "contentHash": "65f472a3e319ba73ac6b19a5e8660d15",
+      "sourceName": "@fhevm/solidity/lib/FheType.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\encrypted-types\\EncryptedTypes.sol": {
+      "lastModificationDate": 1760448400095,
+      "contentHash": "521a624fad71cd29fc4b7c443b41bb86",
+      "sourceName": "encrypted-types/EncryptedTypes.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\contracts\\GhostTips.sol": {
+      "lastModificationDate": 1760449678968,
+      "contentHash": "3cacc33efc5041968e3cb14b79b17318",
+      "sourceName": "contracts/GhostTips.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@fhevm/solidity/lib/FHE.sol",
+        "@fhevm/solidity/config/ZamaConfig.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "GhostTips"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
+      "lastModificationDate": 1760448406284,
+      "contentHash": "d3c790edc9ccf808a17c5a6cd13614fd",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
+      "lastModificationDate": 1760448405701,
+      "contentHash": "67bfbc07588eb8683b3fd8f6f909563e",
+      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\contracts\\GhostTipsSimple.sol": {
+      "lastModificationDate": 1760523315654,
+      "contentHash": "459bbbe3e2d24d7b3b71f8184000225a",
+      "sourceName": "contracts/GhostTipsSimple.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "GhostTipsSimple"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\@fhevm\\solidity\\config\\ZamaConfig.sol": {
+      "lastModificationDate": 1760448400975,
+      "contentHash": "18a39bcfe0027283f975050db52d9058",
+      "sourceName": "@fhevm/solidity/config/ZamaConfig.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@zama-fhe/oracle-solidity/address/ZamaOracleAddress.sol",
+        "../lib/FHE.sol",
+        "../lib/Impl.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "EthereumConfig",
+        "SepoliaConfig",
+        "ZamaConfig"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\@zama-fhe\\oracle-solidity\\address\\ZamaOracleAddress.sol": {
+      "lastModificationDate": 1760448400651,
+      "contentHash": "7d4cce05c3d5e3799454d5a9fba75048",
+      "sourceName": "@zama-fhe/oracle-solidity/address/ZamaOracleAddress.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\contracts\\GhostTipsFHEVM.sol": {
+      "lastModificationDate": 1760603691699,
+      "contentHash": "718b2f4a6653d7083141905dad166d90",
+      "sourceName": "contracts/GhostTipsFHEVM.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@fhevm/solidity/lib/FHE.sol",
+        "@fhevm/solidity/config/ZamaConfig.sol",
+        "./GhostToken.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "GhostTipsFHEVM"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\fhevm\\gateway\\GatewayCaller.sol": {
+      "lastModificationDate": 1760533310653,
+      "contentHash": "61275e485ac8d9b68a66cc4c5b571bc1",
+      "sourceName": "fhevm/gateway/GatewayCaller.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../lib/TFHE.sol",
+        "./lib/Gateway.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "GatewayCaller"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\fhevm\\lib\\TFHE.sol": {
+      "lastModificationDate": 1760533310690,
+      "contentHash": "5e1b4ee3a4cc167d6f59a3e72db2a7f9",
+      "sourceName": "fhevm/lib/TFHE.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./Impl.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "Common",
+        "TFHE"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\fhevm\\gateway\\lib\\Gateway.sol": {
+      "lastModificationDate": 1760533310639,
+      "contentHash": "33fc904ca6b2414f34b94ceee9ae74f9",
+      "sourceName": "fhevm/gateway/lib/Gateway.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../../lib/Impl.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "Gateway",
+        "IGatewayContract",
+        "IKMSVerifier"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\fhevm\\lib\\Impl.sol": {
+      "lastModificationDate": 1760533310656,
+      "contentHash": "93d7e3908104c93e0038c718f41d7c54",
+      "sourceName": "fhevm/lib/Impl.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./TFHE.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "IACL",
+        "ITFHEExecutor",
+        "Impl"
+      ]
+    },
+    "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\contracts\\GhostToken.sol": {
+      "lastModificationDate": 1760603153237,
+      "contentHash": "ab1929f1dba0daa1d0d6e9227607ecc7",
+      "sourceName": "contracts/GhostToken.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@fhevm/solidity/lib/FHE.sol",
+        "@fhevm/solidity/config/ZamaConfig.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "GhostToken"
+      ]
+    }
+  }
+}

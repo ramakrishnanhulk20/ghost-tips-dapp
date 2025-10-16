@@ -1,0 +1,16 @@
+.exit
+const GhostTips = await ethers.getContractFactory("GhostTips")
+console.log("Functions:", iface.fragments.filter(f => f.type === 'function').map(f => f.name))
+const iface = contract.interface
+const contract = GhostTips.attach("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0")
+const GhostTips = await ethers.getContractFactory("GhostTips")
+await ethers.provider.getCode("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0")
+.exit
+count
+const count = await contract.getTipJarCount()
+const contract = GhostTips.attach("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0")
+const GhostTips = await ethers.getContractFactory("GhostTips")
+code
+const code = await ethers.provider.getCode("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0")
+.exit
+await ethers.provider.getBalance("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")

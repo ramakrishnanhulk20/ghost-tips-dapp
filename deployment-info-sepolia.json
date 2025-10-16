@@ -1,0 +1,9 @@
+{
+  "contractName": "GhostTipsFHEVM",
+  "address": "0x5d375823C9Fe502cbEDcB8FD5CfF381391b85147",
+  "network": "sepolia",
+  "chainId": 11155111,
+  "deployedAt": "2025-10-15T13:59:02.144Z",
+  "deployer": "0x7E65E527Cbee544910EaF956b047479B0653b474",
+  "etherscanUrl": "https://sepolia.etherscan.io/address/0x5d375823C9Fe502cbEDcB8FD5CfF381391b85147"
+}
