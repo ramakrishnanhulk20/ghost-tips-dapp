@@ -1,7 +1,7 @@
 {
   "network": "sepolia",
-  "ghostToken": "0xFA629E124f2b379Ab73A41E350d38dE2dEdD39AE",
-  "ghostTips": "0x0A9824Ec87cCb1904E29c8a853E7BcFf14c6BF1d",
+  "ghostToken": "0x3F4d9F1be2B473916E2917fa83174CCF9F1E9F62",
+  "ghostTips": "0xfAeb02c60Bc952a80D5b4FF47Ee8742A3211AcE5",
   "deployer": "0x7E65E527Cbee544910EaF956b047479B0653b474",
-  "timestamp": "2025-10-16T08:39:49.163Z"
+  "timestamp": "2025-10-16T14:09:27.319Z"
 }

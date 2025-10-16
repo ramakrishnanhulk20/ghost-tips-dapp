@@ -37,21 +37,16 @@ contract GhostToken is SepoliaConfig {
         emit Deposit(msg.sender, msg.value);
     }
 
-    // Transfer encrypted tokens (amount is public for now, balance stays encrypted)
+    // Transfer encrypted tokens
     function transfer(address to, uint64 amount) external returns (bool) {
         require(amount > 0, "Amount must be positive");
+        require(to != address(0), "Invalid recipient");
 
         euint64 transferAmount = FHE.asEuint64(amount);
 
-        // Check sender has enough balance
-        ebool canTransfer = FHE.ge(balances[msg.sender], transferAmount);
-
-        // Only transfer if balance is sufficient
-        euint64 amountToTransfer = FHE.select(canTransfer, transferAmount, FHE.asEuint64(0));
-
-        // Update balances
-        balances[to] = FHE.add(balances[to], amountToTransfer);
-        balances[msg.sender] = FHE.sub(balances[msg.sender], amountToTransfer);
+        // Update balances - FHEVM will handle underflow protection
+        balances[msg.sender] = FHE.sub(balances[msg.sender], transferAmount);
+        balances[to] = FHE.add(balances[to], transferAmount);
 
         // Allow permissions
         FHE.allow(balances[to], address(this));
@@ -67,23 +62,18 @@ contract GhostToken is SepoliaConfig {
     function withdraw(uint64 tokenAmount) external {
         require(tokenAmount > 0, "Must withdraw positive amount");
 
+        // Check contract has enough ETH
+        uint256 ethAmount = (uint256(tokenAmount) * 1 ether) / 1000;
+        require(address(this).balance >= ethAmount, "Insufficient contract balance");
+
         euint64 withdrawAmount = FHE.asEuint64(tokenAmount);
 
-        // Check user has enough balance
-        ebool canWithdraw = FHE.ge(balances[msg.sender], withdrawAmount);
-
-        // Only withdraw if balance is sufficient
-        euint64 amountToBurn = FHE.select(canWithdraw, withdrawAmount, FHE.asEuint64(0));
-
-        // Update balance
-        balances[msg.sender] = FHE.sub(balances[msg.sender], amountToBurn);
+        // Update balance - FHEVM will handle underflow
+        balances[msg.sender] = FHE.sub(balances[msg.sender], withdrawAmount);
 
         // Allow permissions
         FHE.allow(balances[msg.sender], address(this));
         FHE.allow(balances[msg.sender], msg.sender);
-
-        // Calculate ETH to send (1000 GHOST = 1 ETH)
-        uint256 ethAmount = (uint256(tokenAmount) * 1 ether) / 1000;
 
         // Transfer ETH to user
         payable(msg.sender).transfer(ethAmount);

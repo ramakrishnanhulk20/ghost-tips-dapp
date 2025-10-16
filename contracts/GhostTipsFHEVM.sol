@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {FHE, euint64} from "@fhevm/solidity/lib/FHE.sol";
+import {FHE, euint64, ebool} from "@fhevm/solidity/lib/FHE.sol";
 import {SepoliaConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 import "./GhostToken.sol";
 
@@ -69,7 +69,7 @@ contract GhostTipsFHEVM is SepoliaConfig {
 
         TipJar storage jar = tipJars[_tipJarId];
 
-        // Transfer GhostTokens from sender to contract
+        // Transfer GhostTokens from sender to contract (GhostToken.transfer handles balance check)
         ghostToken.transfer(address(this), _amount);
 
         // Encrypt the tip amount and add to balance
@@ -84,7 +84,7 @@ contract GhostTipsFHEVM is SepoliaConfig {
         emit TipSent(_tipJarId, _amount, jar.tipCount, _message);
     }
 
-    // NEW: Withdraw tips from tip jar
+    // Withdraw tips from tip jar
     function withdrawFromTipJar(uint256 _tipJarId, uint64 _amount) external {
         require(_tipJarId > 0 && _tipJarId <= tipJarCount, "Invalid tip jar ID");
         TipJar storage jar = tipJars[_tipJarId];
@@ -93,7 +93,7 @@ contract GhostTipsFHEVM is SepoliaConfig {
 
         euint64 withdrawAmount = FHE.asEuint64(_amount);
 
-        // Subtract from encrypted balance
+        // Subtract from encrypted balance - FHEVM handles underflow
         jar.encryptedBalance = FHE.sub(jar.encryptedBalance, withdrawAmount);
 
         // Allow permissions
@@ -106,14 +106,13 @@ contract GhostTipsFHEVM is SepoliaConfig {
         emit TipJarWithdrawal(_tipJarId, jar.creator, _amount);
     }
 
-    // NEW: Get leaderboard - returns tip counts (public) sorted by popularity
+    // Get leaderboard - returns tip counts (public) sorted by popularity
     function getLeaderboard(uint256 limit) external view returns (uint256[] memory, uint256[] memory) {
         uint256 count = tipJarCount > limit ? limit : tipJarCount;
         uint256[] memory ids = new uint256[](count);
         uint256[] memory tipCounts = new uint256[](count);
 
         // Simple implementation: get top jars by tip count
-        // In production, you'd want more efficient sorting
         for (uint256 i = 1; i <= tipJarCount && i <= limit; i++) {
             ids[i - 1] = i;
             tipCounts[i - 1] = tipJars[i].tipCount;
@@ -151,7 +150,7 @@ contract GhostTipsFHEVM is SepoliaConfig {
         return tipJars[_tipJarId].tipCount;
     }
 
-    // NEW: Get encrypted balance (requires permission to decrypt)
+    // Get encrypted balance (requires permission to decrypt)
     function getEncryptedBalance(uint256 _tipJarId) external view returns (euint64) {
         require(_tipJarId > 0 && _tipJarId <= tipJarCount, "Invalid tip jar ID");
         return tipJars[_tipJarId].encryptedBalance;

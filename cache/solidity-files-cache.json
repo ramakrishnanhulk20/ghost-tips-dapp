@@ -589,8 +589,8 @@
       "artifacts": []
     },
     "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\contracts\\GhostTipsFHEVM.sol": {
-      "lastModificationDate": 1760603691699,
-      "contentHash": "718b2f4a6653d7083141905dad166d90",
+      "lastModificationDate": 1760623541205,
+      "contentHash": "ac80b67ad0510e231d7e238359624e26",
       "sourceName": "contracts/GhostTipsFHEVM.sol",
       "solcConfig": {
         "version": "0.8.24",
@@ -822,8 +822,8 @@
       ]
     },
     "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\contracts\\GhostToken.sol": {
-      "lastModificationDate": 1760603153237,
-      "contentHash": "ab1929f1dba0daa1d0d6e9227607ecc7",
+      "lastModificationDate": 1760623484141,
+      "contentHash": "5e1dfc19c80c1b003dcefbf42868d9e9",
       "sourceName": "contracts/GhostToken.sol",
       "solcConfig": {
         "version": "0.8.24",
