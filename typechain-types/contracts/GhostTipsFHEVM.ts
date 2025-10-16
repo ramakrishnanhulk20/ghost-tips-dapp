@@ -162,13 +162,20 @@ export namespace TipJarWithdrawalEvent {
   export type InputTuple = [
     tipJarId: BigNumberish,
     creator: AddressLike,
-    amount: BigNumberish
+    amount: BigNumberish,
+    success: BytesLike
   ];
-  export type OutputTuple = [tipJarId: bigint, creator: string, amount: bigint];
+  export type OutputTuple = [
+    tipJarId: bigint,
+    creator: string,
+    amount: bigint,
+    success: string
+  ];
   export interface OutputObject {
     tipJarId: bigint;
     creator: string;
     amount: bigint;
+    success: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -440,7 +447,7 @@ export interface GhostTipsFHEVM extends BaseContract {
       TipJarCreatedEvent.OutputObject
     >;
 
-    "TipJarWithdrawal(uint256,address,uint256)": TypedContractEvent<
+    "TipJarWithdrawal(uint256,address,uint256,bytes32)": TypedContractEvent<
       TipJarWithdrawalEvent.InputTuple,
       TipJarWithdrawalEvent.OutputTuple,
       TipJarWithdrawalEvent.OutputObject

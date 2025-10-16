@@ -85,11 +85,16 @@ export namespace DepositEvent {
 }
 
 export namespace TransferEvent {
-  export type InputTuple = [from: AddressLike, to: AddressLike];
-  export type OutputTuple = [from: string, to: string];
+  export type InputTuple = [
+    from: AddressLike,
+    to: AddressLike,
+    success: BytesLike
+  ];
+  export type OutputTuple = [from: string, to: string, success: string];
   export interface OutputObject {
     from: string;
     to: string;
+    success: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -98,11 +103,16 @@ export namespace TransferEvent {
 }
 
 export namespace WithdrawalEvent {
-  export type InputTuple = [user: AddressLike, amount: BigNumberish];
-  export type OutputTuple = [user: string, amount: bigint];
+  export type InputTuple = [
+    user: AddressLike,
+    amount: BigNumberish,
+    success: BytesLike
+  ];
+  export type OutputTuple = [user: string, amount: bigint, success: string];
   export interface OutputObject {
     user: string;
     amount: bigint;
+    success: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -244,7 +254,7 @@ export interface GhostToken extends BaseContract {
       DepositEvent.OutputObject
     >;
 
-    "Transfer(address,address)": TypedContractEvent<
+    "Transfer(address,address,bytes32)": TypedContractEvent<
       TransferEvent.InputTuple,
       TransferEvent.OutputTuple,
       TransferEvent.OutputObject
@@ -255,7 +265,7 @@ export interface GhostToken extends BaseContract {
       TransferEvent.OutputObject
     >;
 
-    "Withdrawal(address,uint256)": TypedContractEvent<
+    "Withdrawal(address,uint256,bytes32)": TypedContractEvent<
       WithdrawalEvent.InputTuple,
       WithdrawalEvent.OutputTuple,
       WithdrawalEvent.OutputObject
