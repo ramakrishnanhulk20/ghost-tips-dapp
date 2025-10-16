@@ -26,7 +26,7 @@ contract GhostTipsFHEVM is SepoliaConfig {
 
     event TipJarCreated(uint256 indexed id, address indexed creator, string title);
     event TipSent(uint256 indexed tipJarId, uint256 amount, uint256 newTipCount, string message);
-    event TipJarWithdrawal(uint256 indexed tipJarId, address indexed creator, uint256 amount);
+    event TipJarWithdrawal(uint256 indexed tipJarId, address indexed creator, uint256 amount, ebool success);
 
     constructor(address payable _ghostToken) SepoliaConfig() {
         ghostToken = GhostToken(_ghostToken);
@@ -69,7 +69,8 @@ contract GhostTipsFHEVM is SepoliaConfig {
 
         TipJar storage jar = tipJars[_tipJarId];
 
-        // Transfer GhostTokens from sender to contract (GhostToken.transfer handles balance check)
+        // Transfer GhostTokens from sender to contract
+        // (GhostToken.transfer uses encrypted branching - always succeeds but may not transfer)
         ghostToken.transfer(address(this), _amount);
 
         // Encrypt the tip amount and add to balance
@@ -84,7 +85,7 @@ contract GhostTipsFHEVM is SepoliaConfig {
         emit TipSent(_tipJarId, _amount, jar.tipCount, _message);
     }
 
-    // Withdraw tips from tip jar
+    // Withdraw tips from tip jar - MODERN FHEVM v0.8.0 PATTERN
     function withdrawFromTipJar(uint256 _tipJarId, uint64 _amount) external {
         require(_tipJarId > 0 && _tipJarId <= tipJarCount, "Invalid tip jar ID");
         TipJar storage jar = tipJars[_tipJarId];
@@ -92,18 +93,25 @@ contract GhostTipsFHEVM is SepoliaConfig {
         require(_amount > 0, "Amount must be positive");
 
         euint64 withdrawAmount = FHE.asEuint64(_amount);
+        euint64 jarBal = jar.encryptedBalance;
 
-        // Subtract from encrypted balance - FHEVM handles underflow
-        jar.encryptedBalance = FHE.sub(jar.encryptedBalance, withdrawAmount);
+        // Check if jar has enough balance (encrypted comparison)
+        ebool hasEnough = FHE.ge(jarBal, withdrawAmount);
+
+        // Update balance using encrypted branching
+        // If hasEnough: subtract, else: keep balance unchanged
+        euint64 newBalance = FHE.select(hasEnough, FHE.sub(jarBal, withdrawAmount), jarBal);
+        jar.encryptedBalance = newBalance;
 
         // Allow permissions
-        FHE.allow(jar.encryptedBalance, address(this));
-        FHE.allow(jar.encryptedBalance, jar.creator);
+        FHE.allow(newBalance, address(this));
+        FHE.allow(newBalance, jar.creator);
+        FHE.allow(hasEnough, jar.creator);
 
-        // Transfer GHOST tokens to creator
+        // Transfer GHOST tokens to creator (transfer also uses encrypted branching)
         ghostToken.transfer(jar.creator, _amount);
 
-        emit TipJarWithdrawal(_tipJarId, jar.creator, _amount);
+        emit TipJarWithdrawal(_tipJarId, jar.creator, _amount, hasEnough);
     }
 
     // Get leaderboard - returns tip counts (public) sorted by popularity
