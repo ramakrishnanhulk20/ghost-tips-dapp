@@ -28,7 +28,7 @@ Anonymous tipping platform where all tip amounts are encrypted on-chain using FH
 ## 📍 Deployed Contracts (Sepolia)
 
 - **GhostTips:** `0x0A9824Ec87cCb1904E29c8a853E7BcFf14c6BF1d`
-- **GhostToken:** `0x...` (Add your token address)
+- **GhostToken:** `0xFA629E124f2b379Ab73A41E350d38dE2dEdD39AE`
 
 ## 🏃‍♂️ Quick Start
 
@@ -51,11 +51,5 @@ All operations preserve privacy - no plaintext amounts on-chain!
 ## 🏆 Built for Zama Developer Program
 
 Demonstrating practical FHEVM usage for real-world privacy applications.
-
-## 📄 License
-
-MIT
-
----
 
 **Built with ❤️ and 🔐 by [@ramakrishnanhulk20](https://github.com/ramakrishnanhulk20)**
