@@ -589,8 +589,8 @@
       "artifacts": []
     },
     "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\contracts\\GhostTipsFHEVM.sol": {
-      "lastModificationDate": 1760687745572,
-      "contentHash": "8aa66784d2a8ff323edb2f32152ffb1c",
+      "lastModificationDate": 1760694176209,
+      "contentHash": "832b83d3a31a4a2911e1b7d743835df8",
       "sourceName": "contracts/GhostTipsFHEVM.sol",
       "solcConfig": {
         "version": "0.8.24",
@@ -625,14 +625,14 @@
       },
       "imports": [
         "@fhevm/solidity/lib/FHE.sol",
-        "@fhevm/solidity/config/ZamaConfig.sol",
-        "./GhostToken.sol"
+        "@fhevm/solidity/config/ZamaConfig.sol"
       ],
       "versionPragmas": [
         "^0.8.24"
       ],
       "artifacts": [
-        "GhostTipsFHEVM"
+        "GhostTipsFHEVM",
+        "IGhostToken"
       ]
     },
     "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\node_modules\\fhevm\\gateway\\GatewayCaller.sol": {

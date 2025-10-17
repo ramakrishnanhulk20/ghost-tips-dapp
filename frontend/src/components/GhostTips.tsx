@@ -55,13 +55,13 @@ export default function GhostTips() {
       const account = await signer.getAddress();
 
       const network = await provider.getNetwork();
-      console.log("🌐 Connected to network:", {
+      console.log("ðŸŒ Connected to network:", {
         chainId: network.chainId.toString(),
         name: network.name,
       });
 
-      console.log("📍 Tips Contract:", TIPS_CONTRACT_ADDRESS);
-      console.log("📍 Token Contract:", TOKEN_CONTRACT_ADDRESS);
+      console.log("ðŸ“ Tips Contract:", TIPS_CONTRACT_ADDRESS);
+      console.log("ðŸ“ Token Contract:", TOKEN_CONTRACT_ADDRESS);
 
       const tipsContract = new ethers.Contract(TIPS_CONTRACT_ADDRESS, GHOST_TIPS_ABI.abi, signer);
       const tokenContract = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, GHOST_TOKEN_ABI.abi, signer);
@@ -71,7 +71,7 @@ export default function GhostTips() {
       setAccount(account);
       setIsConnected(true);
 
-      console.log("🦊 Wallet connected:", account);
+      console.log("ðŸ¦Š Wallet connected:", account);
       await loadTipJars(tipsContract);
       await loadLeaderboard(tipsContract);
       setActiveTab("deposit");
@@ -105,10 +105,10 @@ export default function GhostTips() {
 
     try {
       setLoading(true);
-      console.log("📞 Loading tip jars...");
+      console.log("ðŸ“ž Loading tip jars...");
 
       const count = await c.getTipJarCount();
-      console.log("📊 Tip jar count:", count.toString());
+      console.log("ðŸ“Š Tip jar count:", count.toString());
 
       const jars: TipJar[] = [];
 
@@ -133,7 +133,7 @@ export default function GhostTips() {
       }
 
       setTipJars(jars);
-      console.log("📋 Loaded", jars.length, "tip jars");
+      console.log("ðŸ“‹ Loaded", jars.length, "tip jars");
     } catch (error) {
       console.error("Failed to load tip jars:", error);
       alert("Failed to load tip jars. Check console for details.");
@@ -147,7 +147,7 @@ export default function GhostTips() {
     if (!c) return;
 
     try {
-      console.log("🏆 Loading leaderboard...");
+      console.log("ðŸ† Loading leaderboard...");
 
       const [ids, tipCounts] = await c.getLeaderboard(10);
 
@@ -186,7 +186,7 @@ export default function GhostTips() {
       }
 
       setLeaderboard(entries);
-      console.log("🏆 Loaded", entries.length, "leaderboard entries");
+      console.log("ðŸ† Loaded", entries.length, "leaderboard entries");
     } catch (error) {
       console.error("Failed to load leaderboard:", error);
     }
@@ -197,13 +197,13 @@ export default function GhostTips() {
 
     try {
       setLoading(true);
-      console.log("🏺 Creating tip jar...");
+      console.log("ðŸº Creating tip jar...");
 
       const tx = await tipsContract.createTipJar(title, description, category);
-      console.log("⏳ Waiting for transaction...");
+      console.log("â³ Waiting for transaction...");
       await tx.wait();
 
-      showSuccess(`🎉 Tip jar "${title}" created successfully!
+      showSuccess(`ðŸŽ‰ Tip jar "${title}" created successfully!
 
 Your jar is now live and ready to receive encrypted tips!`);
       await loadTipJars();
@@ -222,19 +222,19 @@ Your jar is now live and ready to receive encrypted tips!`);
 
     try {
       setLoading(true);
-      console.log("💰 Depositing ETH for GHOST tokens...");
+      console.log("ðŸ’° Depositing ETH for GHOST tokens...");
 
       const weiAmount = ethers.parseEther(ethAmount);
       const tx = await tokenContract.deposit({ value: weiAmount });
-      console.log("⏳ Waiting for transaction...");
+      console.log("â³ Waiting for transaction...");
       await tx.wait();
 
       const tokensReceived = (parseFloat(ethAmount) * 1000).toFixed(0);
-      showSuccess(`💰 Deposit Successful!
+      showSuccess(`ðŸ’° Deposit Successful!
 
 You received ${tokensReceived} GHOST tokens
 
-🔐 Your balance is now encrypted on-chain using FHEVM!
+ðŸ” Your balance is now encrypted on-chain using FHEVM!
 
 You can now send anonymous tips!`);
     } catch (error) {
@@ -250,20 +250,20 @@ You can now send anonymous tips!`);
 
     try {
       setLoading(true);
-      console.log("💸 Withdrawing GHOST tokens for ETH...");
+      console.log("ðŸ’¸ Withdrawing GHOST tokens for ETH...");
 
       const amount = parseInt(tokenAmount);
       const tx = await tokenContract.withdraw(amount);
-      console.log("⏳ Waiting for transaction...");
+      console.log("â³ Waiting for transaction...");
       await tx.wait();
 
       const ethReceived = (amount / 1000).toFixed(4);
-      showSuccess(`💸 Withdrawal Successful!
+      showSuccess(`ðŸ’¸ Withdrawal Successful!
 
 You withdrew ${tokenAmount} GHOST tokens
 Received ${ethReceived} ETH
 
-🔐 Your encrypted balance has been updated!`);
+ðŸ” Your encrypted balance has been updated!`);
     } catch (error) {
       console.error("Failed:", error);
       alert("Failed to withdraw");
@@ -277,7 +277,7 @@ Received ${ethReceived} ETH
 
     try {
       setLoading(true);
-      console.log("💸 Sending tip...");
+      console.log("ðŸ’¸ Sending tip...");
 
       const tokenAmount = parseInt(amount);
 
@@ -286,20 +286,20 @@ Received ${ethReceived} ETH
       const TIPS_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
       const approveTx = await tokenContract.approve(TIPS_CONTRACT_ADDRESS, tokenAmount);
       await approveTx.wait();
-      console.log("✅ Approval confirmed!");
+      console.log("âœ… Approval confirmed!");
 
       // STEP 2: Send the tip
       console.log("Step 2/2: Sending tip...");
       const tx = await tipsContract.sendTip(tipJarId, tokenAmount, message || "");
-      console.log("⏳ Waiting for transaction...");
+      console.log("â³ Waiting for transaction...");
       await tx.wait();
 
-      showSuccess(`👻 Anonymous Tip Sent!
+      showSuccess(`ðŸ‘» Anonymous Tip Sent!
 
 ${tokenAmount} GHOST tokens sent successfully
 
-🔐 Tip amount is encrypted on-chain
-✨ Your identity remains private
+ðŸ” Tip amount is encrypted on-chain
+âœ¨ Your identity remains private
 
 
 The creator can now withdraw their encrypted balance!`);
@@ -318,18 +318,18 @@ The creator can now withdraw their encrypted balance!`);
 
     try {
       setLoading(true);
-      console.log("💰 Withdrawing from tip jar...");
+      console.log("ðŸ’° Withdrawing from tip jar...");
 
       const tokenAmount = parseInt(amount);
       const tx = await tipsContract.withdrawFromTipJar(tipJarId, tokenAmount);
-      console.log("⏳ Waiting for transaction...");
+      console.log("â³ Waiting for transaction...");
       await tx.wait();
 
-      showSuccess(`💰 Withdrawal Successful!
+      showSuccess(`ðŸ’° Withdrawal Successful!
 
 ${tokenAmount} GHOST tokens withdrawn from your tip jar
 
-🔐 Your encrypted balance has been updated!`);
+ðŸ” Your encrypted balance has been updated!`);
       await loadTipJars();
     } catch (error) {
       console.error("Failed:", error);
@@ -343,11 +343,11 @@ ${tokenAmount} GHOST tokens withdrawn from your tip jar
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-4">
         <div className="text-center max-w-4xl">
-          <h1 className="text-6xl font-bold text-white mb-4">👻 GhostTips</h1>
+          <h1 className="text-6xl font-bold text-white mb-4">ðŸ‘» GhostTips</h1>
           <p className="text-xl text-purple-200 mb-4">Anonymous tipping with TRUE privacy using FHEVM</p>
-          <p className="text-sm text-green-300 mb-2">✅ Fully Homomorphic Encryption</p>
+          <p className="text-sm text-green-300 mb-2">âœ… Fully Homomorphic Encryption</p>
           <p className="text-sm text-purple-300 mb-8">
-            Encrypted balances • Anonymous tips • Privacy-preserving leaderboard 🔐
+            Encrypted balances â€¢ Anonymous tips â€¢ Privacy-preserving leaderboard ðŸ”
           </p>
 
           <button
@@ -355,22 +355,22 @@ ${tokenAmount} GHOST tokens withdrawn from your tip jar
             disabled={loading}
             className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50"
           >
-            {loading ? "🔄 Connecting..." : "🦊 Connect MetaMask"}
+            {loading ? "ðŸ”„ Connecting..." : "ðŸ¦Š Connect MetaMask"}
           </button>
 
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <div className="text-4xl mb-4">🔐</div>
+              <div className="text-4xl mb-4">ðŸ”</div>
               <h3 className="text-lg font-semibold text-white mb-2">Fully Encrypted</h3>
               <p className="text-purple-200 text-sm">Balances encrypted with FHE</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <div className="text-4xl mb-4">👻</div>
+              <div className="text-4xl mb-4">ðŸ‘»</div>
               <h3 className="text-lg font-semibold text-white mb-2">Anonymous Tips</h3>
               <p className="text-purple-200 text-sm">True privacy protection</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <div className="text-4xl mb-4">🏆</div>
+              <div className="text-4xl mb-4">ðŸ†</div>
               <h3 className="text-lg font-semibold text-white mb-2">Privacy Leaderboard</h3>
               <p className="text-purple-200 text-sm">Rankings without revealing amounts</p>
             </div>
@@ -385,10 +385,10 @@ ${tokenAmount} GHOST tokens withdrawn from your tip jar
                 rel="noopener noreferrer"
                 className="text-white font-semibold hover:text-purple-200"
               >
-                ⚡ Zama FHEVM
+                âš¡ Zama FHEVM
               </a>
             </p>
-            <p>Fully Homomorphic Encryption • Sepolia Testnet</p>
+            <p>Fully Homomorphic Encryption â€¢ Sepolia Testnet</p>
           </div>
         </div>
       </div>
@@ -403,7 +403,7 @@ ${tokenAmount} GHOST tokens withdrawn from your tip jar
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <h1 className="text-3xl font-bold text-white">👻 GhostTips</h1>
+              <h1 className="text-3xl font-bold text-white">ðŸ‘» GhostTips</h1>
               <div className="text-xs text-green-400 bg-green-500/20 px-2 py-1 rounded-full">FHEVM Demo</div>
             </div>
             <div className="flex items-center space-x-4">
@@ -425,14 +425,14 @@ ${tokenAmount} GHOST tokens withdrawn from your tip jar
 
           <nav className="mt-4 flex space-x-2 overflow-x-auto pb-2">
             {[
-              { key: "about", label: "📋 About" },
-              { key: "deposit", label: "💰 Deposit" },
-              { key: "withdraw", label: "💸 Withdraw" },
-              { key: "browse", label: "🔍 Browse" },
-              { key: "create", label: "🏺 Create" },
-              { key: "send", label: "👻 Tip" },
-              { key: "leaderboard", label: "🏆 Top Jars" },
-              { key: "mybalance", label: "🔐 My Balance" },
+              { key: "about", label: "ðŸ“‹ About" },
+              { key: "deposit", label: "ðŸ’° Deposit" },
+              { key: "withdraw", label: "ðŸ’¸ Withdraw" },
+              { key: "browse", label: "ðŸ” Browse" },
+              { key: "create", label: "ðŸº Create" },
+              { key: "send", label: "ðŸ‘» Tip" },
+              { key: "leaderboard", label: "ðŸ† Top Jars" },
+              { key: "mybalance", label: "ðŸ” My Balance" },
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -453,7 +453,7 @@ ${tokenAmount} GHOST tokens withdrawn from your tip jar
       {loading && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
-            <div className="animate-spin text-4xl mb-4">⚡</div>
+            <div className="animate-spin text-4xl mb-4">âš¡</div>
             <div className="text-white">Processing transaction...</div>
             <div className="text-purple-300 text-sm mt-2">Please wait for confirmation</div>
           </div>
@@ -466,7 +466,7 @@ ${tokenAmount} GHOST tokens withdrawn from your tip jar
           onClick={() => setShowSuccessModal(false)}
         >
           <div className="bg-gradient-to-br from-green-500 to-blue-500 rounded-lg p-8 max-w-md mx-4 shadow-2xl animate-bounce-in">
-            <div className="text-6xl text-center mb-4">🎉</div>
+            <div className="text-6xl text-center mb-4">ðŸŽ‰</div>
             <h3 className="text-2xl font-bold text-white text-center mb-4">Success!</h3>
             <p className="text-white text-center whitespace-pre-line">{successMessage}</p>
             <button
@@ -508,13 +508,15 @@ ${tokenAmount} GHOST tokens withdrawn from your tip jar
               rel="noopener noreferrer"
               className="flex items-center space-x-2 text-white font-semibold hover:text-purple-200 transition-colors"
             >
-              <span className="text-2xl">⚡</span>
+              <span className="text-2xl">âš¡</span>
               <span>Zama FHEVM</span>
             </a>
-            <span>•</span>
+            <span>â€¢</span>
             <span>Fully Homomorphic Encryption</span>
           </div>
-          <div className="mt-2 text-purple-400 text-xs">Anonymous tipping • Privacy-first Web3 • Sepolia Testnet</div>
+          <div className="mt-2 text-purple-400 text-xs">
+            Anonymous tipping â€¢ Privacy-first Web3 â€¢ Sepolia Testnet
+          </div>
         </div>
       </footer>
     </div>
@@ -524,81 +526,81 @@ ${tokenAmount} GHOST tokens withdrawn from your tip jar
 function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-3xl font-bold text-white mb-8">📋 About GhostTips</h2>
+      <h2 className="text-3xl font-bold text-white mb-8">ðŸ“‹ About GhostTips</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-purple-500/20">
-          <h3 className="text-xl font-semibold text-white mb-4">🔐 What makes it private?</h3>
+          <h3 className="text-xl font-semibold text-white mb-4">ðŸ” What makes it private?</h3>
           <ul className="text-purple-200 text-sm space-y-2">
             <li>
-              • <strong>Encrypted balances</strong> using FHEVM
+              â€¢ <strong>Encrypted balances</strong> using FHEVM
             </li>
             <li>
-              • <strong>Anonymous tips</strong> - amounts are encrypted
+              â€¢ <strong>Anonymous tips</strong> - amounts are encrypted
             </li>
             <li>
-              • <strong>Privacy-preserving</strong> leaderboard
+              â€¢ <strong>Privacy-preserving</strong> leaderboard
             </li>
             <li>
-              • <strong>Only you</strong> can decrypt your balances
+              â€¢ <strong>Only you</strong> can decrypt your balances
             </li>
           </ul>
         </div>
 
         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-purple-500/20">
-          <h3 className="text-xl font-semibold text-white mb-4">⚡ How it works</h3>
+          <h3 className="text-xl font-semibold text-white mb-4">âš¡ How it works</h3>
           <ul className="text-purple-200 text-sm space-y-2">
             <li>
-              • <strong>Deposit ETH</strong> to get GHOST tokens
+              â€¢ <strong>Deposit ETH</strong> to get GHOST tokens
             </li>
             <li>
-              • <strong>Create tip jars</strong> for your projects
+              â€¢ <strong>Create tip jars</strong> for your projects
             </li>
             <li>
-              • <strong>Send anonymous tips</strong> to creators
+              â€¢ <strong>Send anonymous tips</strong> to creators
             </li>
             <li>
-              • <strong>Withdraw earnings</strong> privately
+              â€¢ <strong>Withdraw earnings</strong> privately
             </li>
           </ul>
         </div>
       </div>
 
       <div className="bg-gradient-to-br from-green-500/10 to-blue-500/10 rounded-lg p-8 border border-green-500/20 mb-8">
-        <h3 className="text-2xl font-bold text-white mb-4">🏆 Technical Features</h3>
+        <h3 className="text-2xl font-bold text-white mb-4">ðŸ† Technical Features</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <h4 className="text-green-400 font-semibold mb-2">Smart Contracts</h4>
             <ul className="text-sm text-purple-200">
-              <li>• FHEVM integration</li>
-              <li>• Encrypted data types</li>
-              <li>• FHE operations</li>
-              <li>• Secure withdrawals</li>
+              <li>â€¢ FHEVM integration</li>
+              <li>â€¢ Encrypted data types</li>
+              <li>â€¢ FHE operations</li>
+              <li>â€¢ Secure withdrawals</li>
             </ul>
           </div>
           <div>
             <h4 className="text-blue-400 font-semibold mb-2">Frontend</h4>
             <ul className="text-sm text-purple-200">
-              <li>• Next.js 15</li>
-              <li>• TypeScript</li>
-              <li>• Ethers.js v6</li>
-              <li>• Responsive design</li>
+              <li>â€¢ Next.js 15</li>
+              <li>â€¢ TypeScript</li>
+              <li>â€¢ Ethers.js v6</li>
+              <li>â€¢ Responsive design</li>
             </ul>
           </div>
           <div>
             <h4 className="text-purple-400 font-semibold mb-2">Encryption</h4>
             <ul className="text-sm text-purple-200">
-              <li>• Fully Homomorphic</li>
-              <li>• On-chain privacy</li>
-              <li>• Zero knowledge</li>
-              <li>• Sepolia testnet</li>
+              <li>â€¢ Fully Homomorphic</li>
+              <li>â€¢ On-chain privacy</li>
+              <li>â€¢ Zero knowledge</li>
+              <li>â€¢ Sepolia testnet</li>
             </ul>
           </div>
         </div>
       </div>
 
       <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-6">
-        <h3 className="text-yellow-400 font-semibold mb-2">🔬 Demo Limitations</h3>
+        <h3 className="text-yellow-400 font-semibold mb-2">ðŸ”¬ Demo Limitations</h3>
         <p className="text-purple-200 text-sm">
           This is a <strong>testnet demonstration</strong>. Full decryption requires production gateway access with CORS
           configuration. The encrypted balance retrieval demonstrates that FHE encryption is working correctly on-chain.
@@ -624,11 +626,11 @@ function DepositETH({ onSubmit }: { onSubmit: (amount: string) => void }) {
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-white mb-8">💰 Get GHOST Tokens</h2>
+      <h2 className="text-3xl font-bold text-white mb-8">ðŸ’° Get GHOST Tokens</h2>
       <div className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-purple-500/20">
         <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-6">
           <p className="text-green-300 text-sm">
-            🔐 <strong>PRIVACY UPGRADE:</strong> Deposit ETH to receive encrypted GHOST tokens. Your token balance will
+            ðŸ” <strong>PRIVACY UPGRADE:</strong> Deposit ETH to receive encrypted GHOST tokens. Your token balance will
             be encrypted on-chain using FHEVM!
           </p>
         </div>
@@ -649,7 +651,7 @@ function DepositETH({ onSubmit }: { onSubmit: (amount: string) => void }) {
             <p className="text-purple-300 text-xs mt-2">Exchange Rate: 1 ETH = 1000 GHOST</p>
             {ethAmount && (
               <p className="text-green-400 text-sm mt-2">
-                ➡️ You will receive: <strong>{tokensToReceive} GHOST tokens</strong>
+                âž¡ï¸ You will receive: <strong>{tokensToReceive} GHOST tokens</strong>
               </p>
             )}
           </div>
@@ -659,7 +661,7 @@ function DepositETH({ onSubmit }: { onSubmit: (amount: string) => void }) {
             disabled={!ethAmount}
             className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 disabled:from-gray-500 text-white font-bold py-3 px-6 rounded-lg transition-all"
           >
-            💰 Deposit ETH & Get GHOST Tokens
+            ðŸ’° Deposit ETH & Get GHOST Tokens
           </button>
         </form>
       </div>
@@ -682,11 +684,11 @@ function WithdrawETH({ onSubmit }: { onSubmit: (amount: string) => void }) {
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-white mb-8">💸 Withdraw to ETH</h2>
+      <h2 className="text-3xl font-bold text-white mb-8">ðŸ’¸ Withdraw to ETH</h2>
       <div className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-purple-500/20">
         <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-6">
           <p className="text-blue-300 text-sm">
-            💰 Burn your GHOST tokens to receive ETH back. Your encrypted balance will be reduced accordingly.
+            ðŸ’° Burn your GHOST tokens to receive ETH back. Your encrypted balance will be reduced accordingly.
           </p>
         </div>
 
@@ -706,7 +708,7 @@ function WithdrawETH({ onSubmit }: { onSubmit: (amount: string) => void }) {
             <p className="text-purple-300 text-xs mt-2">Exchange Rate: 1000 GHOST = 1 ETH</p>
             {tokenAmount && (
               <p className="text-green-400 text-sm mt-2">
-                ➡️ You will receive: <strong>{ethToReceive} ETH</strong>
+                âž¡ï¸ You will receive: <strong>{ethToReceive} ETH</strong>
               </p>
             )}
           </div>
@@ -716,7 +718,7 @@ function WithdrawETH({ onSubmit }: { onSubmit: (amount: string) => void }) {
             disabled={!tokenAmount}
             className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 disabled:from-gray-500 text-white font-bold py-3 px-6 rounded-lg transition-all"
           >
-            💸 Withdraw GHOST Tokens to ETH
+            ðŸ’¸ Withdraw GHOST Tokens to ETH
           </button>
         </form>
       </div>
@@ -728,18 +730,18 @@ function BrowseTipJars({ tipJars, onRefresh }: { tipJars: TipJar[]; onRefresh: (
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold text-white">🔍 Browse Tip Jars</h2>
+        <h2 className="text-3xl font-bold text-white">ðŸ” Browse Tip Jars</h2>
         <button
           onClick={onRefresh}
           className="bg-purple-500/20 text-purple-200 px-4 py-2 rounded-lg hover:bg-purple-500/30 transition-all"
         >
-          🔄 Refresh
+          ðŸ”„ Refresh
         </button>
       </div>
 
       {tipJars.length === 0 ? (
         <div className="text-center py-12">
-          <div className="text-6xl mb-4">🏺</div>
+          <div className="text-6xl mb-4">ðŸº</div>
           <p className="text-purple-200 text-lg">No tip jars yet. Create the first one!</p>
         </div>
       ) : (
@@ -759,7 +761,7 @@ function BrowseTipJars({ tipJars, onRefresh }: { tipJars: TipJar[]; onRefresh: (
                   {jar.creator.slice(0, 6)}...{jar.creator.slice(-4)}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-green-400">👻 {jar.tipCount} tips</span>
+                  <span className="text-green-400">ðŸ‘» {jar.tipCount} tips</span>
                   <span className="text-purple-400">#{jar.id}</span>
                 </div>
               </div>
@@ -787,11 +789,11 @@ function CreateTipJar({ onSubmit }: { onSubmit: (t: string, d: string, c: string
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-white mb-8">🏺 Create Tip Jar</h2>
+      <h2 className="text-3xl font-bold text-white mb-8">ðŸº Create Tip Jar</h2>
       <div className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-purple-500/20">
         <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 mb-6">
           <p className="text-purple-300 text-sm">
-            🏺 Create your tip jar to start receiving anonymous, encrypted tips from supporters!
+            ðŸº Create your tip jar to start receiving anonymous, encrypted tips from supporters!
           </p>
         </div>
 
@@ -825,11 +827,11 @@ function CreateTipJar({ onSubmit }: { onSubmit: (t: string, d: string, c: string
               onChange={(e) => setCategory(e.target.value)}
               className="w-full bg-white/10 border border-purple-500/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-400"
             >
-              <option value="creator">🎨 Creator</option>
-              <option value="developer">💻 Developer</option>
-              <option value="charity">❤️ Charity</option>
-              <option value="education">📚 Education</option>
-              <option value="other">🌟 Other</option>
+              <option value="creator">ðŸŽ¨ Creator</option>
+              <option value="developer">ðŸ’» Developer</option>
+              <option value="charity">â¤ï¸ Charity</option>
+              <option value="education">ðŸ“š Education</option>
+              <option value="other">ðŸŒŸ Other</option>
             </select>
           </div>
           <button
@@ -837,7 +839,7 @@ function CreateTipJar({ onSubmit }: { onSubmit: (t: string, d: string, c: string
             disabled={!title || !description}
             className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-gray-500 text-white font-bold py-3 px-6 rounded-lg transition-all"
           >
-            🏺 Create Tip Jar
+            ðŸº Create Tip Jar
           </button>
         </form>
       </div>
@@ -861,11 +863,11 @@ function SendTip({ tipJars, onSubmit }: { tipJars: TipJar[]; onSubmit: (id: numb
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-white mb-8">👻 Send Anonymous Tip</h2>
+      <h2 className="text-3xl font-bold text-white mb-8">ðŸ‘» Send Anonymous Tip</h2>
       <div className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-purple-500/20">
         <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-6">
           <p className="text-green-300 text-sm">
-            👻 Send encrypted tips with complete anonymity! Tip amounts are encrypted on-chain using FHE.
+            ðŸ‘» Send encrypted tips with complete anonymity! Tip amounts are encrypted on-chain using FHE.
           </p>
         </div>
 
@@ -887,7 +889,7 @@ function SendTip({ tipJars, onSubmit }: { tipJars: TipJar[]; onSubmit: (id: numb
             </select>
           </div>
           <div className="mb-6">
-            <label className="block text-purple-200 text-sm font-medium mb-2">Amount (GHOST Tokens) * 🔐</label>
+            <label className="block text-purple-200 text-sm font-medium mb-2">Amount (GHOST Tokens) * ðŸ”</label>
             <input
               type="number"
               step="1"
@@ -898,7 +900,7 @@ function SendTip({ tipJars, onSubmit }: { tipJars: TipJar[]; onSubmit: (id: numb
               placeholder="100"
               required
             />
-            <p className="text-green-400 text-xs mt-1">⚡ Amount is encrypted on-chain using FHEVM</p>
+            <p className="text-green-400 text-xs mt-1">âš¡ Amount is encrypted on-chain using FHEVM</p>
           </div>
           <div className="mb-6">
             <label className="block text-purple-200 text-sm font-medium mb-2">Message (Optional)</label>
@@ -915,7 +917,7 @@ function SendTip({ tipJars, onSubmit }: { tipJars: TipJar[]; onSubmit: (id: numb
             disabled={!selectedJarId || !amount}
             className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 disabled:from-gray-500 text-white font-bold py-3 px-6 rounded-lg transition-all"
           >
-            👻 Send Anonymous Encrypted Tip
+            ðŸ‘» Send Anonymous Encrypted Tip
           </button>
         </form>
       </div>
@@ -927,26 +929,26 @@ function Leaderboard({ entries, onRefresh }: { entries: LeaderboardEntry[]; onRe
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold text-white">🏆 Privacy-Preserving Leaderboard</h2>
+        <h2 className="text-3xl font-bold text-white">ðŸ† Privacy-Preserving Leaderboard</h2>
         <button
           onClick={onRefresh}
           className="bg-purple-500/20 text-purple-200 px-4 py-2 rounded-lg hover:bg-purple-500/30 transition-all"
         >
-          🔄 Refresh
+          ðŸ”„ Refresh
         </button>
       </div>
 
       <div className="max-w-4xl mx-auto">
         <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-6">
           <p className="text-green-300 text-sm">
-            🔐 <strong>Privacy-First Ranking:</strong> Shows tip count (public) while keeping all amounts encrypted! No
+            ðŸ” <strong>Privacy-First Ranking:</strong> Shows tip count (public) while keeping all amounts encrypted! No
             one can see how much you've received.
           </p>
         </div>
 
         {entries.length === 0 ? (
           <div className="text-center py-12">
-            <div className="text-6xl mb-4">🏆</div>
+            <div className="text-6xl mb-4">ðŸ†</div>
             <p className="text-purple-200 text-lg">No tips yet. Be the first!</p>
           </div>
         ) : (
@@ -967,7 +969,7 @@ function Leaderboard({ entries, onRefresh }: { entries: LeaderboardEntry[]; onRe
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <div className={`text-3xl ${index === 0 ? "text-5xl" : ""}`}>
-                      {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `#${index + 1}`}
+                      {index === 0 ? "ðŸ¥‡" : index === 1 ? "ðŸ¥ˆ" : index === 2 ? "ðŸ¥‰" : `#${index + 1}`}
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-white">{entry.jar?.title || `Tip Jar #${entry.id}`}</h3>
@@ -980,7 +982,7 @@ function Leaderboard({ entries, onRefresh }: { entries: LeaderboardEntry[]; onRe
                   <div className="text-right">
                     <div className="text-2xl font-bold text-green-400">{entry.tipCount}</div>
                     <div className="text-purple-300 text-xs">tips received</div>
-                    <div className="text-purple-400 text-xs mt-1">💰 Amounts: 🔐 Encrypted</div>
+                    <div className="text-purple-400 text-xs mt-1">ðŸ’° Amounts: ðŸ” Encrypted</div>
                   </div>
                 </div>
               </div>
@@ -1031,47 +1033,47 @@ function MyBalance({
 
     try {
       setLoadingBalance({ ...loadingBalance, [jarId]: true });
-      console.log(`🔐 Retrieving encrypted balance for jar #${jarId}...`);
+      console.log(`ðŸ” Retrieving encrypted balance for jar #${jarId}...`);
 
       // Get encrypted balance from contract
       const encryptedBalance = await tipsContract.getEncryptedBalance(jarId);
-      console.log("📦 Encrypted balance handle:", encryptedBalance.toString());
+      console.log("ðŸ“¦ Encrypted balance handle:", encryptedBalance.toString());
 
       const handle = encryptedBalance.toString();
 
       setDecryptedBalances({
         ...decryptedBalances,
-        [jarId]: `🔐 ${handle.slice(0, 12)}...`,
+        [jarId]: `ðŸ” ${handle.slice(0, 12)}...`,
       });
 
-      alert(`✅ Encrypted Balance Retrieved Successfully!
+      alert(`âœ… Encrypted Balance Retrieved Successfully!
 
 Jar #${jarId}
 Encrypted Handle:
 ${handle}
 
-🔐 This PROVES your balance IS encrypted on-chain using FHEVM!
+ðŸ” This PROVES your balance IS encrypted on-chain using FHEVM!
 
-📋 Technical Note:
+ðŸ“‹ Technical Note:
 Full client-side decryption requires:
-• Production deployment with CORS proxy
-• Or local mock gateway setup
-• Not supported from localhost (security)
+â€¢ Production deployment with CORS proxy
+â€¢ Or local mock gateway setup
+â€¢ Not supported from localhost (security)
 
-🏆 Demo Achievement:
-✅ FHE encryption working
-✅ Encrypted tips & balances
-✅ Smart contracts implemented correctly
+ðŸ† Demo Achievement:
+âœ… FHE encryption working
+âœ… Encrypted tips & balances
+âœ… Smart contracts implemented correctly
 
 Per Zama guidelines, showing encrypted handles is valid proof for demos and bounties!`);
     } catch (error: any) {
       console.error("Failed to retrieve encrypted balance:", error);
-      alert(`❌ Failed to retrieve balance: ${error.message || "Unknown error"}
+      alert(`âŒ Failed to retrieve balance: ${error.message || "Unknown error"}
 
 This could mean:
-• Jar doesn't exist
-• No permission to view
-• Network connection issue`);
+â€¢ Jar doesn't exist
+â€¢ No permission to view
+â€¢ Network connection issue`);
     } finally {
       setLoadingBalance({ ...loadingBalance, [jarId]: false });
     }
@@ -1079,21 +1081,21 @@ This could mean:
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-white mb-8">🔐 My Encrypted Tip Jar Balances</h2>
+      <h2 className="text-3xl font-bold text-white mb-8">ðŸ” My Encrypted Tip Jar Balances</h2>
       <div className="max-w-4xl mx-auto">
         <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-6">
           <p className="text-blue-300 text-sm">
-            🔐 <strong>Fully Encrypted Balances:</strong> Your tip jar balances are encrypted on-chain using FHEVM.
+            ðŸ” <strong>Fully Encrypted Balances:</strong> Your tip jar balances are encrypted on-chain using FHEVM.
             Click "View Encrypted Balance" to retrieve the encrypted handle as proof of working FHE implementation.
           </p>
           <p className="text-green-400 text-xs mt-2">
-            ✅ This demonstrates that the encryption layer is working correctly on-chain!
+            âœ… This demonstrates that the encryption layer is working correctly on-chain!
           </p>
         </div>
 
         {myJars.length === 0 ? (
           <div className="text-center py-12">
-            <div className="text-6xl mb-4">🏺</div>
+            <div className="text-6xl mb-4">ðŸº</div>
             <p className="text-purple-200 text-lg mb-2">You haven't created any tip jars yet.</p>
             <p className="text-purple-300 text-sm">Create your first tip jar to start receiving anonymous tips!</p>
           </div>
@@ -1116,7 +1118,7 @@ This could mean:
                     <div className="flex justify-between text-sm items-center">
                       <span className="text-purple-300">Balance:</span>
                       <span className="text-yellow-400 font-semibold">
-                        {decryptedBalances[jar.id] || "🔐 Encrypted"}
+                        {decryptedBalances[jar.id] || "ðŸ” Encrypted"}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
@@ -1130,19 +1132,19 @@ This could mean:
                     className="w-full bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 py-2 rounded-lg text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loadingBalance[jar.id]
-                      ? "🔄 Retrieving Encrypted Balance..."
-                      : "👁️ View Encrypted Balance (Proof of FHE)"}
+                      ? "ðŸ”„ Retrieving Encrypted Balance..."
+                      : "ðŸ‘ï¸ View Encrypted Balance (Proof of FHE)"}
                   </button>
                 </div>
               ))}
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-purple-500/20">
-              <h3 className="text-xl font-semibold text-white mb-6">💰 Withdraw from Tip Jar</h3>
+              <h3 className="text-xl font-semibold text-white mb-6">ðŸ’° Withdraw from Tip Jar</h3>
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-6">
                 <p className="text-yellow-400 text-sm">
-                  💡 <strong>Privacy Note:</strong> Withdrawals work with encrypted balances! The smart contract handles
-                  all FHE operations securely.
+                  ðŸ’¡ <strong>Privacy Note:</strong> Withdrawals work with encrypted balances! The smart contract
+                  handles all FHE operations securely.
                 </p>
               </div>
 
@@ -1184,7 +1186,7 @@ This could mean:
                   disabled={!selectedJarId || !withdrawAmount}
                   className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 disabled:from-gray-500 text-white font-bold py-3 px-6 rounded-lg transition-all disabled:cursor-not-allowed"
                 >
-                  💰 Withdraw GHOST Tokens (Encrypted)
+                  ðŸ’° Withdraw GHOST Tokens (Encrypted)
                 </button>
               </form>
             </div>

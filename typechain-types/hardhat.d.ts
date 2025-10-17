@@ -62,6 +62,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GhostTipsFHEVM__factory>;
     getContractFactory(
+      name: "IGhostToken",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IGhostToken__factory>;
+    getContractFactory(
       name: "GhostTipsSimple",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GhostTipsSimple__factory>;
@@ -147,6 +151,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.GhostTipsFHEVM>;
     getContractAt(
+      name: "IGhostToken",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IGhostToken>;
+    getContractAt(
       name: "GhostTipsSimple",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -226,6 +235,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.GhostTipsFHEVM>;
     deployContract(
+      name: "IGhostToken",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IGhostToken>;
+    deployContract(
       name: "GhostTipsSimple",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.GhostTipsSimple>;
@@ -310,6 +323,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.GhostTipsFHEVM>;
+    deployContract(
+      name: "IGhostToken",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IGhostToken>;
     deployContract(
       name: "GhostTipsSimple",
       args: any[],
