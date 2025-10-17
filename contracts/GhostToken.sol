@@ -13,9 +13,12 @@ contract GhostToken is SepoliaConfig {
     mapping(address => mapping(address => euint64)) private allowances;
     mapping(address => bool) private isInitialized;
 
+    // Track plaintext balances for withdraw validation
+    mapping(address => uint64) private plaintextBalances;
+
     event Transfer(address indexed from, address indexed to, ebool success);
     event Deposit(address indexed user, uint256 amount);
-    event Withdrawal(address indexed user, uint256 amount, ebool success);
+    event Withdrawal(address indexed user, uint256 amount);
     event Approval(address indexed owner, address indexed spender, uint64 amount);
 
     constructor() SepoliaConfig() {}
@@ -40,6 +43,9 @@ contract GhostToken is SepoliaConfig {
 
         euint64 newBalance = FHE.add(balances[msg.sender], encryptedAmount);
         balances[msg.sender] = newBalance;
+
+        // Update plaintext balance
+        plaintextBalances[msg.sender] += tokenAmount;
 
         FHE.allowThis(newBalance);
         FHE.allow(newBalance, address(this));
@@ -66,6 +72,7 @@ contract GhostToken is SepoliaConfig {
     function transfer(address to, uint64 amount) external returns (bool) {
         require(amount > 0, "Amount must be positive");
         require(to != address(0), "Invalid recipient");
+        require(plaintextBalances[msg.sender] >= amount, "Insufficient balance");
 
         _initializeBalance(msg.sender);
         _initializeBalance(to);
@@ -83,6 +90,10 @@ contract GhostToken is SepoliaConfig {
         balances[msg.sender] = newSenderBal;
         balances[to] = newRecipientBal;
 
+        // Update plaintext balances
+        plaintextBalances[msg.sender] -= amount;
+        plaintextBalances[to] += amount;
+
         FHE.allowThis(newSenderBal);
         FHE.allowThis(newRecipientBal);
         FHE.allow(newSenderBal, address(this));
@@ -99,6 +110,7 @@ contract GhostToken is SepoliaConfig {
         require(amount > 0, "Amount must be positive");
         require(to != address(0), "Invalid recipient");
         require(from != address(0), "Invalid sender");
+        require(plaintextBalances[from] >= amount, "Insufficient balance");
 
         _initializeBalance(from);
         _initializeBalance(to);
@@ -122,6 +134,10 @@ contract GhostToken is SepoliaConfig {
         balances[to] = newToBal;
         allowances[from][msg.sender] = newAllowance;
 
+        // Update plaintext balances
+        plaintextBalances[from] -= amount;
+        plaintextBalances[to] += amount;
+
         FHE.allowThis(newFromBal);
         FHE.allowThis(newToBal);
         FHE.allowThis(newAllowance);
@@ -141,6 +157,7 @@ contract GhostToken is SepoliaConfig {
 
     function withdraw(uint64 tokenAmount) external {
         require(tokenAmount > 0, "Must withdraw positive amount");
+        require(plaintextBalances[msg.sender] >= tokenAmount, "Insufficient token balance");
 
         _initializeBalance(msg.sender);
 
@@ -156,6 +173,9 @@ contract GhostToken is SepoliaConfig {
         euint64 newBalance = FHE.select(hasEnough, FHE.sub(userBal, withdrawAmount), userBal);
         balances[msg.sender] = newBalance;
 
+        // Update plaintext balance
+        plaintextBalances[msg.sender] -= tokenAmount;
+
         FHE.allowThis(newBalance);
         FHE.allow(newBalance, address(this));
         FHE.allow(newBalance, msg.sender);
@@ -163,11 +183,15 @@ contract GhostToken is SepoliaConfig {
 
         payable(msg.sender).transfer(ethAmount);
 
-        emit Withdrawal(msg.sender, tokenAmount, hasEnough);
+        emit Withdrawal(msg.sender, tokenAmount);
     }
 
     function balanceOf(address account) external view returns (euint64) {
         return balances[account];
+    }
+
+    function plaintextBalanceOf(address account) external view returns (uint64) {
+        return plaintextBalances[account];
     }
 
     receive() external payable {}

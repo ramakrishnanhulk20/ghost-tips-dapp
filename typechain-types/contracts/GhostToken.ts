@@ -31,6 +31,7 @@ export interface GhostTokenInterface extends Interface {
       | "decimals"
       | "deposit"
       | "name"
+      | "plaintextBalanceOf"
       | "protocolId"
       | "symbol"
       | "transfer"
@@ -54,6 +55,10 @@ export interface GhostTokenInterface extends Interface {
   encodeFunctionData(functionFragment: "deposit", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "plaintextBalanceOf",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "protocolId",
     values?: undefined
   ): string;
@@ -76,6 +81,10 @@ export interface GhostTokenInterface extends Interface {
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "plaintextBalanceOf",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "protocolId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
@@ -136,16 +145,11 @@ export namespace TransferEvent {
 }
 
 export namespace WithdrawalEvent {
-  export type InputTuple = [
-    user: AddressLike,
-    amount: BigNumberish,
-    success: BytesLike
-  ];
-  export type OutputTuple = [user: string, amount: bigint, success: string];
+  export type InputTuple = [user: AddressLike, amount: BigNumberish];
+  export type OutputTuple = [user: string, amount: bigint];
   export interface OutputObject {
     user: string;
     amount: bigint;
-    success: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -210,6 +214,12 @@ export interface GhostToken extends BaseContract {
 
   name: TypedContractMethod<[], [string], "view">;
 
+  plaintextBalanceOf: TypedContractMethod<
+    [account: AddressLike],
+    [bigint],
+    "view"
+  >;
+
   protocolId: TypedContractMethod<[], [bigint], "view">;
 
   symbol: TypedContractMethod<[], [string], "view">;
@@ -255,6 +265,9 @@ export interface GhostToken extends BaseContract {
   getFunction(
     nameOrSignature: "name"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "plaintextBalanceOf"
+  ): TypedContractMethod<[account: AddressLike], [bigint], "view">;
   getFunction(
     nameOrSignature: "protocolId"
   ): TypedContractMethod<[], [bigint], "view">;
@@ -342,7 +355,7 @@ export interface GhostToken extends BaseContract {
       TransferEvent.OutputObject
     >;
 
-    "Withdrawal(address,uint256,bytes32)": TypedContractEvent<
+    "Withdrawal(address,uint256)": TypedContractEvent<
       WithdrawalEvent.InputTuple,
       WithdrawalEvent.OutputTuple,
       WithdrawalEvent.OutputObject
