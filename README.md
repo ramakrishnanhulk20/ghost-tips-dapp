@@ -379,7 +379,7 @@ console.log("✅ Transfer complete!");
 
 ## 🤝 Contributing
 
-We welcome contributions! Please:
+I Humbly welcome contributions! Please:
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit changes (`git commit -m 'Add amazing feature'`)
@@ -396,7 +396,7 @@ We welcome contributions! Please:
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file for details
+see [LICENSE](LICENSE) file for details
 
 ---
 
@@ -413,14 +413,14 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 - **GitHub**: [@ramakrishnanhulk20](https://github.com/ramakrishnanhulk20)
 - **Project**: [GhostTips Repository](https://github.com/ramakrishnanhulk20/ghost-tips-dapp)
-- **Email**: your-email@domain.com
+- **Email**: ramakrishnanhulk20@gmail.com
 
 ---
 
 ## 🔗 Links
 
-- [Zama FHEVM Documentation](https://docs.zama.ai/fhevm)
-- [Demo Video](https://youtu.be/your-demo-link)
+- [Zama FHEVM Documentation](https://docs.zama.ai/protocol)
+- [Demo Video](coming..soon..)
 - [Architecture Diagram](https://github.com/ramakrishnanhulk20/ghost-tips-dapp/blob/main/architecture-diagram.png)
 - [Bounty Submission](https://github.com/ramakrishnanhulk20/ghost-tips-dapp/blob/main/bounty-submission.md)
 
