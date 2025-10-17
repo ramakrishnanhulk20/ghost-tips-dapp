@@ -273,13 +273,23 @@ Received ${ethReceived} ETH
   };
 
   const sendTip = async (tipJarId: number, amount: string, message: string) => {
-    if (!tipsContract) return;
+    if (!tipsContract || !tokenContract) return;
 
     try {
       setLoading(true);
       console.log("💸 Sending tip...");
 
       const tokenAmount = parseInt(amount);
+
+      // STEP 1: Approve GhostTips contract to spend tokens
+      console.log("Step 1/2: Approving token spend...");
+      const TIPS_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+      const approveTx = await tokenContract.approve(TIPS_CONTRACT_ADDRESS, tokenAmount);
+      await approveTx.wait();
+      console.log("✅ Approval confirmed!");
+
+      // STEP 2: Send the tip
+      console.log("Step 2/2: Sending tip...");
       const tx = await tipsContract.sendTip(tipJarId, tokenAmount, message || "");
       console.log("⏳ Waiting for transaction...");
       await tx.wait();
@@ -290,6 +300,7 @@ ${tokenAmount} GHOST tokens sent successfully
 
 🔐 Tip amount is encrypted on-chain
 ✨ Your identity remains private
+
 
 The creator can now withdraw their encrypted balance!`);
       await loadTipJars();

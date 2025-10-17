@@ -1,3 +1,9 @@
+console.log("Approved!");
+await tx.wait();
+const tx = await GhostToken.approve("0x0bbb680C96cd7C8585b78ab8bFf6F19579C60d58", 1000);
+console.log("Balance:", balance.toString());
+const balance = await GhostToken.balanceOf("0x7E65E527Cbee544910EaF956b047479B0653b474");
+const GhostToken = await ethers.getContractAt("GhostToken", "0x9425844a8F9938aEF65f82b6437286391D5aCa45");
 .exit
 console.log("Allowance:", allowance.toString());
 const allowance = await GhostToken.allowance("0x7E65E527Cbee544910EaF956b047479B0653b474", "0xdc3d48964Bd43E57d0Ea1425B1CD85fA28E94090");
