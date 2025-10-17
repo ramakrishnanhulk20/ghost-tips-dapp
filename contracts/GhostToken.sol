@@ -12,10 +12,14 @@ contract GhostToken is SepoliaConfig {
     // Encrypted balances mapping
     mapping(address => euint64) private balances;
 
+    // Encrypted allowances: owner => spender => amount
+    mapping(address => mapping(address => euint64)) private allowances;
+
     // Events
     event Transfer(address indexed from, address indexed to, ebool success);
     event Deposit(address indexed user, uint256 amount);
     event Withdrawal(address indexed user, uint256 amount, ebool success);
+    event Approval(address indexed owner, address indexed spender, uint64 amount);
 
     constructor() SepoliaConfig() {}
 
@@ -35,6 +39,22 @@ contract GhostToken is SepoliaConfig {
         FHE.allow(newBalance, msg.sender);
 
         emit Deposit(msg.sender, msg.value);
+    }
+
+    // Approve spender to use tokens
+    function approve(address spender, uint64 amount) external returns (bool) {
+        require(spender != address(0), "Invalid spender");
+
+        euint64 encryptedAmount = FHE.asEuint64(amount);
+        allowances[msg.sender][spender] = encryptedAmount;
+
+        // Set permissions
+        FHE.allow(encryptedAmount, address(this));
+        FHE.allow(encryptedAmount, msg.sender);
+        FHE.allow(encryptedAmount, spender);
+
+        emit Approval(msg.sender, spender, amount);
+        return true;
     }
 
     // Transfer encrypted tokens - MODERN FHEVM v0.8.0 PATTERN
@@ -67,6 +87,49 @@ contract GhostToken is SepoliaConfig {
         // Emit encrypted success flag (frontend can decrypt to show error)
         FHE.allow(hasEnough, msg.sender);
         emit Transfer(msg.sender, to, hasEnough);
+
+        return true;
+    }
+
+    // TransferFrom with encrypted allowance checking - MODERN FHEVM v0.8.0 PATTERN
+    function transferFrom(address from, address to, uint64 amount) external returns (bool) {
+        require(amount > 0, "Amount must be positive");
+        require(to != address(0), "Invalid recipient");
+        require(from != address(0), "Invalid sender");
+
+        euint64 transferAmount = FHE.asEuint64(amount);
+        euint64 fromBal = balances[from];
+        euint64 allowance = allowances[from][msg.sender];
+
+        // Check if sender has enough balance AND spender has enough allowance
+        ebool hasEnoughBalance = FHE.ge(fromBal, transferAmount);
+        ebool hasEnoughAllowance = FHE.ge(allowance, transferAmount);
+        ebool canTransfer = FHE.and(hasEnoughBalance, hasEnoughAllowance);
+
+        // Update balances using encrypted branching
+        euint64 newFromBal = FHE.select(canTransfer, FHE.sub(fromBal, transferAmount), fromBal);
+        euint64 newToBal = FHE.select(canTransfer, FHE.add(balances[to], transferAmount), balances[to]);
+
+        // Update allowance
+        euint64 newAllowance = FHE.select(canTransfer, FHE.sub(allowance, transferAmount), allowance);
+
+        balances[from] = newFromBal;
+        balances[to] = newToBal;
+        allowances[from][msg.sender] = newAllowance;
+
+        // Allow permissions
+        FHE.allow(newFromBal, address(this));
+        FHE.allow(newFromBal, from);
+        FHE.allow(newToBal, address(this));
+        FHE.allow(newToBal, to);
+        FHE.allow(newAllowance, address(this));
+        FHE.allow(newAllowance, from);
+        FHE.allow(newAllowance, msg.sender);
+
+        // Emit encrypted success flag
+        FHE.allow(canTransfer, from);
+        FHE.allow(canTransfer, msg.sender);
+        emit Transfer(from, to, canTransfer);
 
         return true;
     }

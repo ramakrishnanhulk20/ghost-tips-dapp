@@ -1,4 +1,10 @@
 .exit
+console.log("Allowance:", allowance.toString());
+const allowance = await GhostToken.allowance("0x7E65E527Cbee544910EaF956b047479B0653b474", "0xdc3d48964Bd43E57d0Ea1425B1CD85fA28E94090");
+console.log("Balance:", balance.toString());
+const balance = await GhostToken.balanceOf("0x7E65E527Cbee544910EaF956b047479B0653b474");
+const GhostToken = await ethers.getContractAt("GhostToken", "0x91b7104b8508d4f677ea22577B01e98393d3Db95");
+.exit
 const GhostTips = await ethers.getContractFactory("GhostTips")
 console.log("Functions:", iface.fragments.filter(f => f.type === 'function').map(f => f.name))
 const iface = contract.interface

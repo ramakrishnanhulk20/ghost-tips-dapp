@@ -69,9 +69,9 @@ contract GhostTipsFHEVM is SepoliaConfig {
 
         TipJar storage jar = tipJars[_tipJarId];
 
-        // Transfer GhostTokens from sender to contract
-        // (GhostToken.transfer uses encrypted branching - always succeeds but may not transfer)
-        ghostToken.transfer(address(this), _amount);
+        // Transfer GhostTokens from sender to contract using transferFrom
+        // User must approve this contract first!
+        ghostToken.transferFrom(msg.sender, address(this), _amount);
 
         // Encrypt the tip amount and add to balance
         euint64 encryptedTipAmount = FHE.asEuint64(_amount);
@@ -108,7 +108,7 @@ contract GhostTipsFHEVM is SepoliaConfig {
         FHE.allow(newBalance, jar.creator);
         FHE.allow(hasEnough, jar.creator);
 
-        // Transfer GHOST tokens to creator (transfer also uses encrypted branching)
+        // Transfer GHOST tokens to creator
         ghostToken.transfer(jar.creator, _amount);
 
         emit TipJarWithdrawal(_tipJarId, jar.creator, _amount, hasEnough);

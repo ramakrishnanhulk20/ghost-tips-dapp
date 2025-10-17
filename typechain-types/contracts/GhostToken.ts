@@ -26,6 +26,7 @@ import type {
 export interface GhostTokenInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "approve"
       | "balanceOf"
       | "decimals"
       | "deposit"
@@ -33,13 +34,18 @@ export interface GhostTokenInterface extends Interface {
       | "protocolId"
       | "symbol"
       | "transfer"
+      | "transferFrom"
       | "withdraw"
   ): FunctionFragment;
 
   getEvent(
-    nameOrSignatureOrTopic: "Deposit" | "Transfer" | "Withdrawal"
+    nameOrSignatureOrTopic: "Approval" | "Deposit" | "Transfer" | "Withdrawal"
   ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "approve",
+    values: [AddressLike, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "balanceOf",
     values: [AddressLike]
@@ -57,10 +63,15 @@ export interface GhostTokenInterface extends Interface {
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "transferFrom",
+    values: [AddressLike, AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "withdraw",
     values: [BigNumberish]
   ): string;
 
+  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
@@ -68,7 +79,29 @@ export interface GhostTokenInterface extends Interface {
   decodeFunctionResult(functionFragment: "protocolId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferFrom",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+}
+
+export namespace ApprovalEvent {
+  export type InputTuple = [
+    owner: AddressLike,
+    spender: AddressLike,
+    amount: BigNumberish
+  ];
+  export type OutputTuple = [owner: string, spender: string, amount: bigint];
+  export interface OutputObject {
+    owner: string;
+    spender: string;
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export namespace DepositEvent {
@@ -163,6 +196,12 @@ export interface GhostToken extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  approve: TypedContractMethod<
+    [spender: AddressLike, amount: BigNumberish],
+    [boolean],
+    "nonpayable"
+  >;
+
   balanceOf: TypedContractMethod<[account: AddressLike], [string], "view">;
 
   decimals: TypedContractMethod<[], [bigint], "view">;
@@ -181,6 +220,12 @@ export interface GhostToken extends BaseContract {
     "nonpayable"
   >;
 
+  transferFrom: TypedContractMethod<
+    [from: AddressLike, to: AddressLike, amount: BigNumberish],
+    [boolean],
+    "nonpayable"
+  >;
+
   withdraw: TypedContractMethod<
     [tokenAmount: BigNumberish],
     [void],
@@ -191,6 +236,13 @@ export interface GhostToken extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "approve"
+  ): TypedContractMethod<
+    [spender: AddressLike, amount: BigNumberish],
+    [boolean],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "balanceOf"
   ): TypedContractMethod<[account: AddressLike], [string], "view">;
@@ -217,9 +269,23 @@ export interface GhostToken extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "transferFrom"
+  ): TypedContractMethod<
+    [from: AddressLike, to: AddressLike, amount: BigNumberish],
+    [boolean],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "withdraw"
   ): TypedContractMethod<[tokenAmount: BigNumberish], [void], "nonpayable">;
 
+  getEvent(
+    key: "Approval"
+  ): TypedContractEvent<
+    ApprovalEvent.InputTuple,
+    ApprovalEvent.OutputTuple,
+    ApprovalEvent.OutputObject
+  >;
   getEvent(
     key: "Deposit"
   ): TypedContractEvent<
@@ -243,6 +309,17 @@ export interface GhostToken extends BaseContract {
   >;
 
   filters: {
+    "Approval(address,address,uint64)": TypedContractEvent<
+      ApprovalEvent.InputTuple,
+      ApprovalEvent.OutputTuple,
+      ApprovalEvent.OutputObject
+    >;
+    Approval: TypedContractEvent<
+      ApprovalEvent.InputTuple,
+      ApprovalEvent.OutputTuple,
+      ApprovalEvent.OutputObject
+    >;
+
     "Deposit(address,uint256)": TypedContractEvent<
       DepositEvent.InputTuple,
       DepositEvent.OutputTuple,
