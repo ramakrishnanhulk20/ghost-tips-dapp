@@ -52,6 +52,24 @@ export default function GhostTips() {
     { key: "withdraw", label: "🔥 Withdraw" },
   ];
 
+  const refreshAllData = async () => {
+    if (tipsContract && tokenContract && account) {
+      setLoading(true);
+      try {
+        await Promise.all([
+          fetchTipJars(tipsContract),
+          fetchLeaderboard(tipsContract),
+          fetchGhostBalance(tokenContract, account),
+          fetchMyJars(tipsContract, account),
+        ]);
+      } catch (error) {
+        console.error("Failed to refresh data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const connectWallet = async () => {
     if (typeof window.ethereum === "undefined") {
       alert("Please install MetaMask!");
@@ -91,7 +109,6 @@ export default function GhostTips() {
   };
 
   const fetchTipJars = async (contract: ethers.Contract) => {
-    setLoading(true);
     try {
       const jarCount = await contract.nextJarId();
       const jars: TipJar[] = [];
@@ -117,8 +134,6 @@ export default function GhostTips() {
       setTipJars(jars);
     } catch (error) {
       console.error("Failed to load tip jars:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -205,9 +220,9 @@ export default function GhostTips() {
 
       setSuccessMessage("🎉 Tip jar created successfully!");
       setShowSuccessModal(true);
-      fetchTipJars(tipsContract);
-      fetchMyJars(tipsContract, account);
-      // Form cleared after success
+
+      // Auto-refresh data
+      await refreshAllData();
     } catch (error: any) {
       console.error("Failed to create tip jar:", error);
       alert("Failed to create tip jar: " + (error.message || "Unknown error"));
@@ -235,9 +250,9 @@ export default function GhostTips() {
 
       setSuccessMessage("👻 Tip sent successfully!");
       setShowSuccessModal(true);
-      fetchGhostBalance(tokenContract, account);
-      fetchLeaderboard(tipsContract);
-      // Form cleared after success
+
+      // Auto-refresh data
+      await refreshAllData();
     } catch (error: any) {
       console.error("Failed to send tip:", error);
       alert("Failed to send tip: " + (error.message || "Unknown error"));
@@ -262,8 +277,9 @@ export default function GhostTips() {
 
       setSuccessMessage("✅ Deposited successfully!");
       setShowSuccessModal(true);
-      fetchGhostBalance(tokenContract, account);
-      // Form cleared after success
+
+      // Auto-refresh data
+      await refreshAllData();
     } catch (error: any) {
       console.error("Failed to deposit:", error);
       alert("Failed to deposit: " + (error.message || "Unknown error"));
@@ -286,8 +302,9 @@ export default function GhostTips() {
 
       setSuccessMessage("🔥 Withdrawn successfully!");
       setShowSuccessModal(true);
-      fetchGhostBalance(tokenContract, account);
-      // Form cleared after success
+
+      // Auto-refresh data
+      await refreshAllData();
     } catch (error: any) {
       console.error("Failed to withdraw:", error);
       alert("Failed to withdraw: " + (error.message || "Unknown error"));
@@ -353,7 +370,7 @@ export default function GhostTips() {
         ) : (
           <div className="max-w-6xl mx-auto">
             <div className="bg-gray-800 rounded-2xl p-6 mb-8 shadow-2xl border border-purple-500/30">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between flex-wrap gap-4">
                 <div className="flex items-center space-x-4">
                   <img
                     src={blockies(account)}
@@ -367,9 +384,20 @@ export default function GhostTips() {
                     </p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-gray-400">GHOST Balance</p>
-                  <p className="text-2xl font-bold text-purple-400">{ghostBalance}</p>
+                <div className="flex items-center gap-4">
+                  <div className="text-right">
+                    <p className="text-sm text-gray-400">GHOST Balance</p>
+                    <p className="text-2xl font-bold text-purple-400">{ghostBalance}</p>
+                  </div>
+                  <button
+                    onClick={refreshAllData}
+                    disabled={loading}
+                    className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg font-bold transition-all disabled:opacity-50 flex items-center gap-2"
+                    title="Refresh all data"
+                  >
+                    <span className={loading ? "animate-spin inline-block" : ""}>🔄</span>
+                    <span className="hidden sm:inline">{loading ? "Refreshing..." : "Refresh"}</span>
+                  </button>
                 </div>
               </div>
               <div className="mt-4 p-3 bg-gray-900 rounded-lg border border-gray-700">
@@ -388,10 +416,13 @@ export default function GhostTips() {
                     <div className="text-6xl mb-4">✨</div>
                     <h3 className="text-2xl font-bold mb-4">{successMessage}</h3>
                     <button
-                      onClick={() => setShowSuccessModal(false)}
+                      onClick={async () => {
+                        setShowSuccessModal(false);
+                        await refreshAllData();
+                      }}
                       className="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-xl font-bold"
                     >
-                      Close
+                      Close & Refresh
                     </button>
                   </div>
                   <div className="mt-4 p-4 bg-yellow-500/10 rounded-lg border border-yellow-500/30">
@@ -567,8 +598,7 @@ export default function GhostTips() {
                               Tips: <span className="font-bold text-white">{jar.tipCount}</span>
                             </span>
                             <span className="text-xs text-gray-500">
-                              by {jar.creator.slice(0, 6)}...
-                              {jar.creator.slice(-4)}
+                              by {jar.creator.slice(0, 6)}...{jar.creator.slice(-4)}
                             </span>
                           </div>
                         </div>
@@ -715,8 +745,7 @@ export default function GhostTips() {
                               <h3 className="font-bold text-lg">{entry.jar?.title}</h3>
                               <p className="text-sm text-gray-400">{entry.jar?.description || ""}</p>
                               <p className="text-xs text-gray-500 mt-1">
-                                Creator: {entry.jar?.creator.slice(0, 6)}...
-                                {entry.jar?.creator.slice(-4)}
+                                Creator: {entry.jar?.creator.slice(0, 6)}...{entry.jar?.creator.slice(-4)}
                               </p>
                             </div>
                           </div>
