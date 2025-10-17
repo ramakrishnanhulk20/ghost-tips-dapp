@@ -11,6 +11,7 @@ contract GhostToken is SepoliaConfig {
 
     mapping(address => euint64) private balances;
     mapping(address => mapping(address => euint64)) private allowances;
+    mapping(address => bool) private isInitialized;
 
     event Transfer(address indexed from, address indexed to, ebool success);
     event Deposit(address indexed user, uint256 amount);
@@ -19,8 +20,20 @@ contract GhostToken is SepoliaConfig {
 
     constructor() SepoliaConfig() {}
 
+    function _initializeBalance(address account) private {
+        if (!isInitialized[account]) {
+            balances[account] = FHE.asEuint64(0);
+            FHE.allowThis(balances[account]);
+            FHE.allow(balances[account], address(this));
+            FHE.allow(balances[account], account);
+            isInitialized[account] = true;
+        }
+    }
+
     function deposit() external payable {
         require(msg.value > 0, "Must send ETH");
+
+        _initializeBalance(msg.sender);
 
         uint64 tokenAmount = uint64((msg.value * 1000) / 1 ether);
         euint64 encryptedAmount = FHE.asEuint64(tokenAmount);
@@ -28,7 +41,6 @@ contract GhostToken is SepoliaConfig {
         euint64 newBalance = FHE.add(balances[msg.sender], encryptedAmount);
         balances[msg.sender] = newBalance;
 
-        // Allow contract to manipulate encrypted values
         FHE.allowThis(newBalance);
         FHE.allow(newBalance, address(this));
         FHE.allow(newBalance, msg.sender);
@@ -55,15 +67,16 @@ contract GhostToken is SepoliaConfig {
         require(amount > 0, "Amount must be positive");
         require(to != address(0), "Invalid recipient");
 
+        _initializeBalance(msg.sender);
+        _initializeBalance(to);
+
         euint64 transferAmount = FHE.asEuint64(amount);
         euint64 senderBal = balances[msg.sender];
 
-        // Allow contract to use senderBal
         FHE.allowThis(senderBal);
 
         ebool hasEnough = FHE.ge(senderBal, transferAmount);
 
-        // Use FHE.select: select(condition, ifTrue, ifFalse)
         euint64 newSenderBal = FHE.select(hasEnough, FHE.sub(senderBal, transferAmount), senderBal);
         euint64 newRecipientBal = FHE.select(hasEnough, FHE.add(balances[to], transferAmount), balances[to]);
 
@@ -87,11 +100,13 @@ contract GhostToken is SepoliaConfig {
         require(to != address(0), "Invalid recipient");
         require(from != address(0), "Invalid sender");
 
+        _initializeBalance(from);
+        _initializeBalance(to);
+
         euint64 transferAmount = FHE.asEuint64(amount);
         euint64 fromBal = balances[from];
         euint64 allowance = allowances[from][msg.sender];
 
-        // Allow contract to use these encrypted values
         FHE.allowThis(fromBal);
         FHE.allowThis(allowance);
 
@@ -126,6 +141,8 @@ contract GhostToken is SepoliaConfig {
 
     function withdraw(uint64 tokenAmount) external {
         require(tokenAmount > 0, "Must withdraw positive amount");
+
+        _initializeBalance(msg.sender);
 
         uint256 ethAmount = (uint256(tokenAmount) * 1 ether) / 1000;
         require(address(this).balance >= ethAmount, "Insufficient contract ETH balance");

@@ -1,4 +1,39 @@
 .exit
+console.log("🎉 TRANSFER WORKED!");
+await tx.wait();
+const tx = await GhostToken.transfer("0x48018aA1a362108B28Ffd2A96f2e77EB83B66CE8", 1);
+// Test transfer to wallet
+console.log("✅ Deposited!");
+await depositTx.wait();
+const depositTx = await GhostToken.deposit({ value: ethers.parseEther("0.01") });
+// Deposit
+const GhostToken = await ethers.getContractAt("GhostToken", "0x9F650ecbC1e70cC4d2d16727BCF56488055ab2F8");
+.exit
+console.log("✅ Transfer to wallet worked!");
+await tx2.wait();
+const tx2 = await GhostToken.transfer("0x48018aA1a362108B28Ffd2A96f2e77EB83B66CE8", 1);
+console.log("✅ Transfer to wallet worked!");
+await testTx.wait();
+const testTx = await GhostToken.transfer("0x48018aA1a362108B28Ffd2A96f2e77EB83B66CE8", 1);
+console.log("✅ Transfer to wallet worked!");
+await testTx.wait();
+console.log("To balance:", toBal.toString());
+const toBal = await GhostToken.balanceOf("0x21885E8E6B3e1F27B4c959D3FFC429Ef479D14A0");
+// Check if balances[to] exists
+console.log("✅ Transfer worked!");
+await testTx.wait();
+const testTx = await GhostToken.transfer("0x21885E8E6B3e1F27B4c959D3FFC429Ef479D14A0", 1);
+// Test transfer
+console.log("✅ Approved!");
+await approveTx.wait();
+const approveTx = await GhostToken.approve("0x21885E8E6B3e1F27B4c959D3FFC429Ef479D14A0", 1000);
+// Approve GhostTips
+console.log("✅ Deposited!");
+await depositTx.wait();
+const depositTx = await GhostToken.deposit({ value: ethers.parseEther("0.01") });
+// Deposit 0.01 ETH
+const GhostToken = await ethers.getContractAt("GhostToken", "0xd1fF255fe6EDd0b0D9079Fc603aE7B34e4aE4B63");
+.exit
 console.log("Success!");
 await tx3.wait();
 const tx3 = await GhostToken.transfer("0x0bbb680C96cd7C8585b78ab8bFf6F19579C60d58", 1, {gasLimit: 500000});

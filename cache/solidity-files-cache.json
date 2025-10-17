@@ -822,8 +822,8 @@
       ]
     },
     "C:\\Users\\levih\\OneDrive\\Desktop\\ghost-tips-dapp\\contracts\\GhostToken.sol": {
-      "lastModificationDate": 1760690840876,
-      "contentHash": "fe3050fb138aa3e18e9bf66430ee01a0",
+      "lastModificationDate": 1760691557652,
+      "contentHash": "e43c4a91f4d415386c184a140567574f",
       "sourceName": "contracts/GhostToken.sol",
       "solcConfig": {
         "version": "0.8.24",
