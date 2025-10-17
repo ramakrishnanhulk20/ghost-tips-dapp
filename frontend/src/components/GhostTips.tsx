@@ -161,7 +161,13 @@ export default function GhostTips() {
         },
       }));
 
-      setLeaderboard(entries);
+      // Sort by tip count (descending - highest tips first) 🏆
+      entries.sort((a, b) => b.tipCount - a.tipCount);
+
+      // Filter out entries with 0 tips
+      const filteredEntries = entries.filter((entry) => entry.tipCount > 0);
+
+      setLeaderboard(filteredEntries);
     } catch (error) {
       console.error("Failed to load leaderboard:", error);
       setLeaderboard([]);
