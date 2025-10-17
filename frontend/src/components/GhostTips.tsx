@@ -207,7 +207,7 @@ export default function GhostTips() {
       setShowSuccessModal(true);
       fetchTipJars(tipsContract);
       fetchMyJars(tipsContract, account);
-      e.currentTarget.reset();
+      // Form cleared after success
     } catch (error: any) {
       console.error("Failed to create tip jar:", error);
       alert("Failed to create tip jar: " + (error.message || "Unknown error"));
@@ -237,7 +237,7 @@ export default function GhostTips() {
       setShowSuccessModal(true);
       fetchGhostBalance(tokenContract, account);
       fetchLeaderboard(tipsContract);
-      e.currentTarget.reset();
+      // Form cleared after success
     } catch (error: any) {
       console.error("Failed to send tip:", error);
       alert("Failed to send tip: " + (error.message || "Unknown error"));
@@ -263,7 +263,7 @@ export default function GhostTips() {
       setSuccessMessage("✅ Deposited successfully!");
       setShowSuccessModal(true);
       fetchGhostBalance(tokenContract, account);
-      e.currentTarget.reset();
+      // Form cleared after success
     } catch (error: any) {
       console.error("Failed to deposit:", error);
       alert("Failed to deposit: " + (error.message || "Unknown error"));
@@ -287,7 +287,7 @@ export default function GhostTips() {
       setSuccessMessage("🔥 Withdrawn successfully!");
       setShowSuccessModal(true);
       fetchGhostBalance(tokenContract, account);
-      e.currentTarget.reset();
+      // Form cleared after success
     } catch (error: any) {
       console.error("Failed to withdraw:", error);
       alert("Failed to withdraw: " + (error.message || "Unknown error"));
@@ -567,7 +567,8 @@ export default function GhostTips() {
                               Tips: <span className="font-bold text-white">{jar.tipCount}</span>
                             </span>
                             <span className="text-xs text-gray-500">
-                              by {jar.creator.slice(0, 6)}...{jar.creator.slice(-4)}
+                              by {jar.creator.slice(0, 6)}...
+                              {jar.creator.slice(-4)}
                             </span>
                           </div>
                         </div>
@@ -714,7 +715,8 @@ export default function GhostTips() {
                               <h3 className="font-bold text-lg">{entry.jar?.title}</h3>
                               <p className="text-sm text-gray-400">{entry.jar?.description || ""}</p>
                               <p className="text-xs text-gray-500 mt-1">
-                                Creator: {entry.jar?.creator.slice(0, 6)}...{entry.jar?.creator.slice(-4)}
+                                Creator: {entry.jar?.creator.slice(0, 6)}...
+                                {entry.jar?.creator.slice(-4)}
                               </p>
                             </div>
                           </div>
