@@ -1,3 +1,27 @@
+.exit
+console.log("Success!");
+await tx3.wait();
+const tx3 = await GhostToken.transfer("0x0bbb680C96cd7C8585b78ab8bFf6F19579C60d58", 1, {gasLimit: 500000});
+console.log("Transfer worked!");
+await tx2.wait();
+const tx2 = await GhostToken.transfer("0x0bbb680C96cd7C8585b78ab8bFf6F19579C60d58", 1);
+// Try transfer again
+console.log("New Balance:", newBal.toString());
+const newBal = await GhostToken.balanceOf("0x7E65E527Cbee544910EaF956b047479B0653b474");
+// Check balance again
+console.log("Deposited!");
+await depositTx.wait();
+const depositTx = await GhostToken.deposit({ value: ethers.parseEther("0.01") });
+// Deposit 0.01 ETH to get 10 GHOST tokens
+console.log("Direct transfer worked!");
+await tx.wait();
+const tx = await GhostToken.transfer("0x0bbb680C96cd7C8585b78ab8bFf6F19579C60d58", 1);
+// Try to transfer directly to GhostTips to test
+console.log("Encrypted Balance:", balance.toString());
+const balance = await GhostToken.balanceOf("0x7E65E527Cbee544910EaF956b047479B0653b474");
+// Check your balance (it's encrypted, but we'll see something)
+const GhostTips = await ethers.getContractAt("GhostTipsFHEVM", "0x0bbb680C96cd7C8585b78ab8bFf6F19579C60d58");
+const GhostToken = await ethers.getContractAt("GhostToken", "0x9425844a8F9938aEF65f82b6437286391D5aCa45");
 console.log("Approved!");
 await tx.wait();
 const tx = await GhostToken.approve("0x0bbb680C96cd7C8585b78ab8bFf6F19579C60d58", 1000);
