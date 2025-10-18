@@ -420,7 +420,7 @@ see [LICENSE](LICENSE) file for details
 ## 🔗 Links
 
 - [Zama FHEVM Documentation](https://docs.zama.ai/protocol)
-- [Demo Video](coming..soon..)
+- [Demo Video](https://youtu.be/J0NSAj8md5w?si=P54KsPe9Zdvc_4bx)
 - [Architecture Diagram](https://github.com/ramakrishnanhulk20/ghost-tips-dapp/blob/main/architecture-diagram.png)
 - [Bounty Submission](https://github.com/ramakrishnanhulk20/ghost-tips-dapp/blob/main/bounty-submission.md)
 
